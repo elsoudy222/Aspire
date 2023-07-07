@@ -57,6 +57,7 @@ class CoursesScreen extends StatelessWidget {
                       //     fontSize: 18.sp,
                       //   ),
                       // ),
+                      //
                     ],
                   ),
                 ),
