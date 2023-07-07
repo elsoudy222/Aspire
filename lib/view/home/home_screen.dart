@@ -21,27 +21,27 @@ class _HomeScreenState extends State<HomeScreen> {
   List<CardsModel> cards = [
     CardsModel(
       title: "الدروس",
-      image: "assets/images/Lessons.png",
+      image: "assets/svg/Lessons.svg",
     ),
     CardsModel(
       title: "الكورسات",
-      image: "assets/images/Courses.png",
+      image: "assets/svg/Lessons.svg",
     ),
     CardsModel(
       title: "مشاهير",
-      image: "assets/images/famous.png",
+      image: "assets/svg/Lessons.svg",
     ),
     CardsModel(
       title: "انشطة اخرى",
-      image: "assets/images/activity.png",
+      image: "assets/svg/Lessons.svg",
     ),
   ];
-  // List<Widget> screens = [
-  //   StagesScreen(),
-  //   StagesScreen(),
-  //   StagesScreen(),
-  //   StagesScreen(),
-  // ];
+  List<String> screens = [
+    stagesScreen,
+    coursesScreen,
+    stagesScreen,
+    stagesScreen,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: cards[index].title,
                       image: cards[index].image,
                       onTap: () {
-                        Navigator.pushNamed(context, stagesScreen);
+                        Navigator.pushNamed(context, screens[index]);
                       },
                     ),
                   ),

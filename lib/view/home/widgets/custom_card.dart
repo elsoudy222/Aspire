@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomCard extends StatelessWidget {
   const CustomCard({super.key, required this.title, required this.image, required this.onTap});
@@ -34,13 +35,16 @@ class CustomCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // Expanded(
+            //   child: Image(
+            //     image: AssetImage(image),
+            //     fit: BoxFit.contain,
+            //     height: 80.h,
+            //     width: 100.w,
+            //   ),
+            // ),
             Expanded(
-              child: Image(
-                image: AssetImage(image),
-                fit: BoxFit.contain,
-                height: 80.h,
-                width: 100.w,
-              ),
+              child: SvgPicture.asset(image),
             ),
 
             Text(title,

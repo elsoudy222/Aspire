@@ -10,4 +10,5 @@ const String stagesScreen = 'stagesScreen';
 const String levelsScreen = 'levelsScreen';
 const String lessonsScreen = 'lessonsScreen';
 const String teachersScreen = 'teachersScreen';
+const String coursesScreen = 'coursesScreen';
 
