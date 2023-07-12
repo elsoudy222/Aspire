@@ -8,16 +8,12 @@ import '../../core/constants/app_colors/app_colors.dart';
 import '../../core/constants/data/data.dart';
 
 class LevelsScreen extends StatelessWidget {
-  LevelsScreen({super.key});
 
-  List<String> titles = [
-    "الصف الاول",
-    "الصف الثاني",
-    "الصف الثالث",
-    "الصف الرابع",
-    "الصف خامس",
-    "الصف السادس",
-  ];
+  final List<String> levels ;
+  LevelsScreen({super.key, required this.levels,});
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +62,9 @@ class LevelsScreen extends StatelessWidget {
               ),
               GridView.builder(
                 shrinkWrap: true,
-                itemCount: titles.length,
-                itemBuilder: (context, i) {
-                  return customLevelsCard(context,title: titles[i]);
+                itemCount: levels.length,
+                itemBuilder: (context, i){
+                  return customLevelsCard(context,title: levels[i]);
                 },
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,

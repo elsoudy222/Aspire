@@ -1,4 +1,6 @@
 
+import 'package:aspire_edu/model/model.dart';
+import 'package:aspire_edu/view/levels/levels_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +11,41 @@ import '../../core/constants/app_colors/app_colors.dart';
 import '../../core/constants/data/data.dart';
 
 class StagesScreen extends StatelessWidget {
-  const StagesScreen({super.key});
+   StagesScreen({super.key});
+
+ List<Model> stage= [
+   Model(
+       title: 'المرحلة الابتدائية',
+       gradetitle: [
+         "الصف الاول",
+         "الصف الثاني",
+         "الصف الثالث",
+         "الصف الرابع",
+         "الصف خامس",
+         "الصف السادس",
+       ]
+   ),
+   Model(
+       title: 'المرحلة الاعدادية',
+       gradetitle: [
+         "الصف الاول",
+         "الصف الثاني",
+         "الصف الثالث",
+
+       ]
+
+   ),
+   Model(
+       title: 'المرحلة الثانوية',
+       gradetitle: [
+         "الصف الاول",
+         "الصف الثاني",
+         "الصف الثالث",
+
+       ]
+
+   ),
+ ];
 
   @override
   Widget build(BuildContext context) {
@@ -83,17 +119,58 @@ class StagesScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  customStagesCard(context,title: "المرحلة\nالابتدائية",),
+                  customStagesCard(context,title: stage[0].title, stage: stage[0].gradetitle,),
                   SizedBox(width: 10.w,),
-                  customStagesCard(context,title: "المرحلة\nالاعدادية",),
+                  customStagesCard(context,title:  stage[1].title,stage: stage[1].gradetitle,),
                 ],
               ),
               SizedBox(height: 35.h,),
-              customStagesCard(context,title: "المرحلة\nالثانوية",)
+              customStagesCard(context,title:  stage[2].title,stage: stage[2].gradetitle,)
             ],
           ),
         ));
   }
+
+   Widget customStagesCard(context,{
+     required String title,
+     VoidCallback? onTap,
+     required stage
+   }){
+     return GestureDetector(
+       onTap: (){
+         Navigator.push(context, MaterialPageRoute(
+             builder: (context,){
+           return LevelsScreen(
+               levels: stage
+           );
+         }));
+       },
+       child: Container(
+         height: 140.h,
+         width: 160.w,
+         decoration: BoxDecoration(
+             color: Colors.white,
+             borderRadius: BorderRadius.circular(15,),
+
+             boxShadow: [
+               BoxShadow(
+                 color: Colors.grey.withOpacity(0.1),
+                 spreadRadius: 6,
+                 blurRadius: 3,
+                 offset: Offset(1, 1),
+               )
+             ]
+         ),
+         child: Center(
+           child: Text(title,
+             textAlign: TextAlign.center,
+             style: TextStyle(fontSize: 25.sp,fontWeight: FontWeight.bold,color: AppColors.primaryColor),),
+         ),
+       ),
+     );
+   }
+
+
 }
 
 Widget buttonWidget({
@@ -118,34 +195,3 @@ Widget buttonWidget({
   );
 }
 
-Widget customStagesCard(context,{
-  required String title,
-   VoidCallback? onTap,
-}){
-  return GestureDetector(
-    onTap: (){
-      Navigator.pushNamed(context, levelsScreen);
-    },
-    child: Container(
-      height: 140.h,
-      width: 160.w,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15,),
-
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 6,
-              blurRadius: 3,
-              offset: Offset(1, 1),
-            )
-          ]
-      ),
-      child: Center(
-        child: Text(title,
-          style: TextStyle(fontSize: 25.sp,fontWeight: FontWeight.bold,color: AppColors.primaryColor),),
-      ),
-    ),
-  );
-}
