@@ -11,7 +11,7 @@ import 'model/home_model.dart';
 import '../stages/stages_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
