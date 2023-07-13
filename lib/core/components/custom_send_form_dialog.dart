@@ -8,8 +8,12 @@ import 'custom_button.dart';
 import 'custom_text_form_field.dart';
 
 class CustomSendingFormDialog extends StatefulWidget {
+
+  final String title;
+  final String instructor;
+
   CustomSendingFormDialog({
-    super.key,
+    super.key, required this.title, required this.instructor,
   });
 
   @override
@@ -72,12 +76,12 @@ class _CustomSendingFormDialogState extends State<CustomSendingFormDialog> {
                   Text(
                     "انت دلوقتي بتحجز مادة العربي",
                     style:
-                        TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                    TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     "الصف الاول مع استاذ محمود مجدي",
                     style:
-                        TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                    TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -142,13 +146,13 @@ class _CustomSendingFormDialogState extends State<CustomSendingFormDialog> {
                                 padding: EdgeInsets.all(25),
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.white
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.white
                                 ),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                  MainAxisAlignment.spaceEvenly,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Image(
@@ -181,7 +185,7 @@ class _CustomSendingFormDialogState extends State<CustomSendingFormDialog> {
                                             Navigator.pushNamedAndRemoveUntil(
                                               context,
                                               homeScreen,
-                                              (route) => false,
+                                                  (route) => false,
                                             );
                                           }),
                                     )

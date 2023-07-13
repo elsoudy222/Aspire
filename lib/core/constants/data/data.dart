@@ -11,4 +11,6 @@ const String levelsScreen = 'levelsScreen';
 const String lessonsScreen = 'lessonsScreen';
 const String teachersScreen = 'teachersScreen';
 const String coursesScreen = 'coursesScreen';
+const String famousScreen = 'famousScreen';
+const String activityScreen = 'activityScreen';
 

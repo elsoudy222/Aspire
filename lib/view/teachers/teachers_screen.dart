@@ -85,7 +85,10 @@ class TeachersScreen extends StatelessWidget {
                   showDialog(
                       context: context,
                       builder: (context) {
-                        return CustomSendingFormDialog();
+                        return CustomSendingFormDialog(
+                          title: 'مادة العربي',
+                          instructor: 'الصف الاول مع استاذ محمود مجدي',
+                        );
                       });
                 },
               ),

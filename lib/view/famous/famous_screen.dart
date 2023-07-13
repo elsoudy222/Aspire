@@ -8,8 +8,8 @@ import '../../core/components/custom_send_form_dialog.dart';
 import '../../core/constants/app_colors/app_colors.dart';
 import '../../core/constants/data/data.dart';
 
-class CoursesScreen extends StatelessWidget {
-  const CoursesScreen({super.key});
+class FamousScreen extends StatelessWidget {
+  const FamousScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,24 +32,24 @@ class CoursesScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "الكورسات",
+                        "مشاهير",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF0D001D),
                           fontSize: 25.sp,
                         ),
                       ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Text(
-                        "توفر المنصة أفضل الكورسات في مختلف المجالات.",
-                        style: TextStyle(
-                          color: Color(0xFF163D66),
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20.sp,
-                        ),
-                      ),
+                      // SizedBox(
+                      //   height: 10.h,
+                      // ),
+                      // Text(
+                      //   "توفر المنصة أفضل الكورسات في مختلف المجالات.",
+                      //   style: TextStyle(
+                      //     color: Color(0xFF163D66),
+                      //     fontWeight: FontWeight.w600,
+                      //     fontSize: 20.sp,
+                      //   ),
+                      // ),
                       // Text(
                       //   "كل ما ستحتاجه من دروس فى جميع المراحل ",
                       //   style: TextStyle(
@@ -62,18 +62,16 @@ class CoursesScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 25.h,
+                  height: 20.h,
                 ),
                 ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemCount: 5,
                     itemBuilder: (context, index) {
-                      return customCoursesCard(context);
+                      return customFamousCard(context);
                     }),
-                customCoursesCard(
-                  context,
-                )
+
               ],
             ),
           ),
@@ -82,9 +80,9 @@ class CoursesScreen extends StatelessWidget {
 }
 
 Widget buttonWidget(
-  context, {
-  required String title,
-}) {
+    context, {
+      required String title,
+    }) {
   return GestureDetector(
     onTap: () {
       print("tapped");
@@ -92,10 +90,11 @@ Widget buttonWidget(
           context: context,
           builder: (context) {
             return CustomSendingFormDialog(
-              title: ' كورس الالماني',
-              instructor: ' مع هير محمد عويس',
+              title: 'ندوة',
+              instructor: 'الاستاذ  ياسر الحزيمي',
             );
           });
+  
     },
     child: Container(
       height: 40.h,
@@ -118,19 +117,19 @@ Widget buttonWidget(
   );
 }
 
-Widget customCoursesCard(
-  context, {
-  // required String courseTitle,
-  // required String instructor,
-  // required String image,
-  VoidCallback? onTap,
-}) {
+Widget customFamousCard(
+    context, {
+      // required String courseTitle,
+      // required String instructor,
+      // required String image,
+      VoidCallback? onTap,
+    }) {
   return Container(
     //height: 230.h,
     width: double.infinity,
     margin: EdgeInsets.symmetric(vertical: 5.h),
     decoration: BoxDecoration(
-      color: Colors.white,
+      color: AppColors.primaryColor,
       borderRadius: BorderRadius.circular(
         15,
       ),
@@ -148,31 +147,41 @@ Widget customCoursesCard(
         Image(
           image: AssetImage("assets/images/german.png"),
           width: double.infinity,
-          height: 180.h,
+         // height: 10.h,
           fit: BoxFit.cover,
         ),
+
+        // SvgPicture.asset("assets/svg/yasser.svg"),
         Padding(
-          padding: EdgeInsets.only(right: 6.0.w, left: 6.0.w, top: 10.h,bottom: 10.h),
-          child: Row(
+          padding: EdgeInsets.only(right: 6.0.w, left: 6.0.w, top: 10.h),
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 children: [
                   Text(
-                    "كورس الألماني",
+
+                    "ياسر الحزيمي",
                     style: TextStyle(
+
                         fontWeight: FontWeight.bold,
                         fontSize: 20.sp,
-                        color: AppColors.primaryColor),
+
+                        color: Colors.white),
                   ),
+                  SizedBox(height: 7.h,),
                   Text(
-                    "هير / محمد عويس",
+                    "يسعدنا تقديم الاستاذ ياسر الحزيمي فى كيف تنجح العلاقات",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontSize: 15.sp, color: AppColors.primaryColor),
+                        fontSize: 18.sp,
+                        color: Colors.white),
                   ),
+                  SizedBox(height: 10.h,),
                 ],
               ),
-              buttonWidget(context, title: "احجز الآن")
+              buttonWidget(context, title: "احجز الآن"),
+              SizedBox(height: 10.h,),
             ],
           ),
         )
