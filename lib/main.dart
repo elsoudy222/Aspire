@@ -1,4 +1,5 @@
 
+import 'package:aspire_edu/view/activities/activites.dart';
 import 'package:aspire_edu/view/courses/courses_screen.dart';
 import 'package:aspire_edu/view/famous/famous_screen.dart';
 import 'package:aspire_edu/view/home/home_screen.dart';
@@ -53,11 +54,10 @@ class MyApp extends StatelessWidget {
               secondSplashScreen : (context) => SecondSplashScreen(),
               homeScreen : (context) => HomeScreen(),
               stagesScreen : (context) =>  StagesScreen(),
-              //levelsScreen : (context) => LevelsScreen(levelTitle: titles,),
               lessonsScreen : (context) => LessonsScreen(),
               teachersScreen : (context) => TeachersScreen(),
               famousScreen : (context) => FamousScreen(),
-              // activityScreen : (context) => Actitie(),
+              activityScreen : (context) => ActivitiesScreen(),
             },
 
             // home: TeachersScreen()
