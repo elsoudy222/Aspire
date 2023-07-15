@@ -1,5 +1,8 @@
+import 'package:aspire_edu/view-model/cubits/app_cubit/appcubit_cubit.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/constants/app_colors/app_colors.dart';
@@ -7,45 +10,47 @@ import '../model/carousel_model.dart';
 import 'carousel_slider.dart';
 
 class MyCarouselWidget extends StatefulWidget {
-
-  const MyCarouselWidget({Key? key, }) : super(key: key);
+  const MyCarouselWidget({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<MyCarouselWidget> createState() => _MyCarouselWidgetState();
 }
 
 class _MyCarouselWidgetState extends State<MyCarouselWidget> {
-  List<CarouselModel> carouselModel = [
-    CarouselModel(
-      title: "اللغه الانجليزية",
-      profName: "الأستاذه / رحمة مصطفى",
-      subtitle:
-      "الحجز متاح يومياً من الساعه ٩ صباحاً ل ٩ مساءً في الفرع الرئيسي او من خلال التطبيق.",
-      imageUrl: "imageUrl",
-    ),
-    CarouselModel(
-      title: "اللغه الانجليزية",
-      profName: "الأستاذه / رحمة مصطفى",
-      subtitle:
-      "الحجز متاح يومياً من الساعه ٩ صباحاً ل ٩ مساءً في الفرع الرئيسي او من خلال التطبيق.",
-      imageUrl: "imageUrl",
-    ),
-    CarouselModel(
-      title: "اللغه الانجليزية",
-      profName: "الأستاذه / رحمة مصطفى",
-      subtitle:
-      "الحجز متاح يومياً من الساعه ٩ صباحاً ل ٩ مساءً في الفرع الرئيسي او من خلال التطبيق.",
-      imageUrl: "imageUrl",
-    ),
-    CarouselModel(
-      title: "اللغه الانجليزية",
-      profName: "الأستاذه / رحمة مصطفى",
-      subtitle:
-      "الحجز متاح يومياً من الساعه ٩ صباحاً ل ٩ مساءً في الفرع الرئيسي او من خلال التطبيق.",
-      imageUrl: "imageUrl",
-    ),
-  ];
+  // List<CarouselModel> carouselModel = [
+  //   CarouselModel(
+  //     title: "اللغه الانجليزية",
+  //     profName: "الأستاذه / رحمة مصطفى",
+  //     subtitle:
+  //         "الحجز متاح يومياً من الساعه ٩ صباحاً ل ٩ مساءً في الفرع الرئيسي او من خلال التطبيق.",
+  //     imageUrl: "imageUrl",
+  //   ),
+  //   CarouselModel(
+  //     title: "اللغه الانجليزية",
+  //     profName: "الأستاذه / رحمة مصطفى",
+  //     subtitle:
+  //         "الحجز متاح يومياً من الساعه ٩ صباحاً ل ٩ مساءً في الفرع الرئيسي او من خلال التطبيق.",
+  //     imageUrl: "imageUrl",
+  //   ),
+  //   CarouselModel(
+  //     title: "اللغه الانجليزية",
+  //     profName: "الأستاذه / رحمة مصطفى",
+  //     subtitle:
+  //         "الحجز متاح يومياً من الساعه ٩ صباحاً ل ٩ مساءً في الفرع الرئيسي او من خلال التطبيق.",
+  //     imageUrl: "imageUrl",
+  //   ),
+  //   CarouselModel(
+  //     title: "اللغه الانجليزية",
+  //     profName: "الأستاذه / رحمة مصطفى",
+  //     subtitle:
+  //         "الحجز متاح يومياً من الساعه ٩ صباحاً ل ٩ مساءً في الفرع الرئيسي او من خلال التطبيق.",
+  //     imageUrl: "imageUrl",
+  //   ),
+  // ];
   int currentIndex = 0;
+
   Widget indicator(int index) {
     return Container(
       margin: const EdgeInsets.all(5),
@@ -53,45 +58,79 @@ class _MyCarouselWidgetState extends State<MyCarouselWidget> {
       height: 10,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: currentIndex == index
-              ? AppColors.primaryColor
-              : Colors.grey),
+          color: currentIndex == index ? AppColors.primaryColor : Colors.grey),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CarouselSlider.builder(
-            itemCount: carouselModel.length,
-            itemBuilder: (context, index, realIndex) {
-              return CarouselBody(
-                title: carouselModel[index].title,
-                profName:carouselModel[index].profName,
-                subtitle: carouselModel[index].subtitle,
-              );
-            },
-            options: CarouselOptions(
-              height: 150.h,
-              viewportFraction: 1.0,
-              autoPlay: true,
-              autoPlayInterval: Duration(seconds: 3),
-              onPageChanged: (index, reason) {
-                setState(() {
-                  currentIndex = index;
-                });
-              },
-            )),
-        SizedBox(height: 10.h,),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(carouselModel.length, (index) {
-            return indicator(index);
-          }),
-        )
-      ],
+    return BlocBuilder<AppCubit, AppStates>(
+      builder: (context, state) {
+        var cubit = AppCubit.get(context);
+        print(cubit.bannersModel.toString());
+        return ConditionalBuilder(
+          condition:  cubit.bannersModel.isNotEmpty,
+          builder: (context) => Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CarouselSlider(
+                  items: cubit.bannersModel
+                      .map(
+                        (e) => CarouselBody(
+                      title: "${e.mainTitle}",
+                      profName: "${e.subTitle}",
+                      subtitle: "${e.aboutNews}",
+                      // TODO :
+                      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRv4UK-VacVrppny4aGjzhWStSrcsP_6A1UdFvRLCMg&s",
+                    ),
+                  )
+                      .toList(),
+                  options: CarouselOptions(
+                    height: 150.0.h,
+
+                    viewportFraction: 1.0,
+                    enableInfiniteScroll: false,
+                    reverse: false,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(seconds: 1),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    scrollDirection: Axis.horizontal,
+                  )),
+              SizedBox(
+                height: 10.h,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(cubit.bannersModel.length, (index) {
+                  return indicator(index);
+                }),
+              )
+            ],
+          ),
+          fallback: (context) => Container(
+            margin: EdgeInsets.symmetric(
+              horizontal: 5,
+            ),
+            height: 130.h,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.primaryColor,
+              borderRadius: BorderRadius.circular(12),
+
+            ),
+            child: Center(
+              child: Text(
+                "There is no News Yet",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 25.sp
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -114,8 +153,9 @@ class CarouselBody extends StatelessWidget {
     BuildContext context,
   ) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 5,),
-
+      margin: EdgeInsets.symmetric(
+        horizontal: 5,
+      ),
       height: 130.h,
       width: double.infinity,
       decoration: BoxDecoration(
@@ -143,10 +183,9 @@ class CarouselBody extends StatelessWidget {
                   Text(
                     profName,
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold
-                    ),
+                        color: Colors.white,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     // width: 120.w,
@@ -165,7 +204,7 @@ class CarouselBody extends StatelessWidget {
           Expanded(
             child: CircleAvatar(
               radius: 40.h,
-              // backgroundImage: AssetImage(image),
+               backgroundImage: NetworkImage(image!),
             ),
           ),
         ],
@@ -173,6 +212,3 @@ class CarouselBody extends StatelessWidget {
     );
   }
 }
-
-
-

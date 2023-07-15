@@ -1,4 +1,5 @@
-
+import 'package:aspire_edu/view-model/database/network/dio_helper.dart';
+import 'package:aspire_edu/view/TEST_APIS/test_apis.dart';
 import 'package:aspire_edu/view/activities/activites.dart';
 import 'package:aspire_edu/view/courses/courses_screen.dart';
 import 'package:aspire_edu/view/famous/famous_screen.dart';
@@ -16,8 +17,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'core/constants/data/data.dart';
+import 'model/home_model.dart';
 
-void main() {
+void main() async{
+  //WidgetsFlutterBinding().initInstances();
+  await DioHelper.init();
   runApp(const MyApp());
 }
 
@@ -54,13 +58,14 @@ class MyApp extends StatelessWidget {
               secondSplashScreen : (context) => SecondSplashScreen(),
               homeScreen : (context) => HomeScreen(),
               stagesScreen : (context) =>  StagesScreen(),
-              lessonsScreen : (context) => LessonsScreen(),
+            //  lessonsScreen : (context) => LessonsScreen(),
               teachersScreen : (context) => TeachersScreen(),
               famousScreen : (context) => FamousScreen(),
+              coursesScreen : (context) => CoursesScreen(),
               activityScreen : (context) => ActivitiesScreen(),
             },
 
-            // home: TeachersScreen()
+            // home: HomeScreen()
           );
         },
       ),

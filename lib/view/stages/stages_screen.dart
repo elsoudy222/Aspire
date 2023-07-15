@@ -1,5 +1,5 @@
 
-import 'package:aspire_edu/model/model.dart';
+import 'package:aspire_edu/model/stage_levels_model.dart';
 import 'package:aspire_edu/view/levels/levels_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,36 +13,53 @@ import '../../core/constants/data/data.dart';
 class StagesScreen extends StatelessWidget {
    StagesScreen({super.key});
 
- List<Model> stage= [
-   Model(
-       title: 'المرحلة الابتدائية',
-       gradetitle: [
+ List<StageAndLevelsModel> stage= [
+   StageAndLevelsModel(
+       stage: 'المرحلة الابتدائية',
+       levelTitle: [
          "الصف الاول",
          "الصف الثاني",
          "الصف الثالث",
          "الصف الرابع",
          "الصف خامس",
          "الصف السادس",
-       ]
+       ],
+     levelTitleData: [
+       "الصف الاول الابتدائي",
+       "الصف الثانى الابتدائي",
+       "الصف الثالث الابتدائي",
+       "الصف الرابع الابتدائي",
+       "الصف الخامس الابتدائي",
+       "الصف السادس الابتدائي",
+     ]
    ),
-   Model(
-       title: 'المرحلة الاعدادية',
-       gradetitle: [
+   StageAndLevelsModel(
+       stage: 'المرحلة الاعدادية',
+       levelTitle: [
          "الصف الاول",
          "الصف الثاني",
          "الصف الثالث",
 
-       ]
+       ],
+       levelTitleData: [
+         "الصف الاول الاعدادي",
+         "الصف الثانى الاعدادي",
+         "الصف الثالث الاعدادي",
+       ],
 
    ),
-   Model(
-       title: 'المرحلة الثانوية',
-       gradetitle: [
+   StageAndLevelsModel(
+       stage: 'المرحلة الثانوية',
+       levelTitle: [
          "الصف الاول",
          "الصف الثاني",
          "الصف الثالث",
-
-       ]
+       ],
+     levelTitleData: [
+       "الصف الاول الثانوى",
+       "الصف الثانى الثانوى",
+       "الصف الثالث الثانوى",
+     ],
 
    ),
  ];
@@ -119,13 +136,13 @@ class StagesScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  customStagesCard(context,title: stage[0].title, stage: stage[0].gradetitle,),
+                  customStagesCard(context,title: stage[0].stage, stage: stage[0].levelTitle,),
                   SizedBox(width: 10.w,),
-                  customStagesCard(context,title:  stage[1].title,stage: stage[1].gradetitle,),
+                  customStagesCard(context,title:  stage[1].stage,stage: stage[1].levelTitle,),
                 ],
               ),
               SizedBox(height: 35.h,),
-              customStagesCard(context,title:  stage[2].title,stage: stage[2].gradetitle,)
+              customStagesCard(context,title:  stage[2].stage,stage: stage[2].levelTitle,)
             ],
           ),
         ));

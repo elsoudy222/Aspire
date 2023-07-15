@@ -1,5 +1,7 @@
+import 'package:aspire_edu/view-model/cubits/app_cubit/appcubit_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../core/components/custom_appbar.dart';
@@ -20,69 +22,68 @@ class FamousScreen extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15.0.w, vertical: 20.h),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "مشاهير",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF0D001D),
-                          fontSize: 25.sp,
-                        ),
+        body: BlocProvider(
+          create: (context) => AppCubit()..getFamous(),
+          child: BlocConsumer<AppCubit, AppStates>(
+            listener: (context, state) {
+              // TODO: implement listener
+            },
+            builder: (context, state) {
+              var cubit = AppCubit.get(context);
+              print(cubit.famousModel);
+              return Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: 15.0.w, vertical: 20.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "مشاهير",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF0D001D),
+                              fontSize: 25.sp,
+                            ),
+                          ),
+                        ],
                       ),
-                      // SizedBox(
-                      //   height: 10.h,
-                      // ),
-                      // Text(
-                      //   "توفر المنصة أفضل الكورسات في مختلف المجالات.",
-                      //   style: TextStyle(
-                      //     color: Color(0xFF163D66),
-                      //     fontWeight: FontWeight.w600,
-                      //     fontSize: 20.sp,
-                      //   ),
-                      // ),
-                      // Text(
-                      //   "كل ما ستحتاجه من دروس فى جميع المراحل ",
-                      //   style: TextStyle(
-                      //     color: Color(0xFF163D66),
-                      //     fontSize: 18.sp,
-                      //   ),
-                      // ),
-                      //
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: cubit.famousModel.length,
+                          itemBuilder: (context, index) {
+                            print(cubit.famousModel[index].celeName);
+                            return customFamousCard(
+                                context,
+                                instructor: cubit.famousModel[index].celeName!,
+                                subtitle: cubit.famousModel[index].aboutcele!,
+                                image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRv4UK-VacVrppny4aGjzhWStSrcsP_6A1UdFvRLCMg&s",
+                            );
+                          }),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return customFamousCard(context);
-                    }),
-
-              ],
-            ),
+              );
+            },
           ),
         ));
   }
 }
 
 Widget buttonWidget(
-    context, {
-      required String title,
-    }) {
+  context, {
+  required String title,
+}) {
   return GestureDetector(
     onTap: () {
       print("tapped");
@@ -94,7 +95,6 @@ Widget buttonWidget(
               instructor: 'الاستاذ  ياسر الحزيمي',
             );
           });
-  
     },
     child: Container(
       height: 40.h,
@@ -118,12 +118,12 @@ Widget buttonWidget(
 }
 
 Widget customFamousCard(
-    context, {
-      // required String courseTitle,
-      // required String instructor,
-      // required String image,
-      VoidCallback? onTap,
-    }) {
+  context, {
+  required String instructor,
+  required String subtitle,
+  required String image,
+  VoidCallback? onTap,
+}) {
   return Container(
     //height: 230.h,
     width: double.infinity,
@@ -133,21 +133,13 @@ Widget customFamousCard(
       borderRadius: BorderRadius.circular(
         15,
       ),
-      // boxShadow: [
-      //   BoxShadow(
-      //     color: Colors.grey.withOpacity(0.1),
-      //     spreadRadius: 6,
-      //     blurRadius: 3,
-      //     offset: Offset(1, 1),
-      //   )
-      // ],
     ),
     child: Column(
       children: [
         Image(
-          image: AssetImage("assets/images/german.png"),
+          image: NetworkImage(image),
           width: double.infinity,
-         // height: 10.h,
+           height: 185.h,
           fit: BoxFit.cover,
         ),
 
@@ -160,28 +152,29 @@ Widget customFamousCard(
               Column(
                 children: [
                   Text(
-
-                    "ياسر الحزيمي",
+                    instructor,
                     style: TextStyle(
-
                         fontWeight: FontWeight.bold,
                         fontSize: 20.sp,
-
                         color: Colors.white),
                   ),
-                  SizedBox(height: 7.h,),
+                  SizedBox(
+                    height: 7.h,
+                  ),
                   Text(
-                    "يسعدنا تقديم الاستاذ ياسر الحزيمي فى كيف تنجح العلاقات",
+                    subtitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 18.sp,
-                        color: Colors.white),
+                    style: TextStyle(fontSize: 18.sp, color: Colors.white),
                   ),
-                  SizedBox(height: 10.h,),
+                  SizedBox(
+                    height: 10.h,
+                  ),
                 ],
               ),
               buttonWidget(context, title: "احجز الآن"),
-              SizedBox(height: 10.h,),
+              SizedBox(
+                height: 10.h,
+              ),
             ],
           ),
         )

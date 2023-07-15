@@ -22,60 +22,51 @@ class ActivitiesScreen extends StatelessWidget {
         ),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15.0.w, vertical: 20.h),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "انشطة اخرى",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF0D001D),
-                          fontSize: 25.sp,
-                        ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "انشطة اخرى",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF0D001D),
+                        fontSize: 25.sp,
                       ),
-                      SizedBox(
-                        height: 10.h,
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    Text(
+                      "يمكنك حجز كل الانشطه المتاحة من خلالنا",
+                      style: TextStyle(
+                        color: Color(0xFF163D66),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20.sp,
                       ),
-                      Text(
-                        "يمكنك حجز كل الانشطه المتاحة من خلالنا",
-                        style: TextStyle(
-                          color: Color(0xFF163D66),
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20.sp,
-                        ),
-                      ),
-                      // Text(
-                      //   "كل ما ستحتاجه من دروس فى جميع المراحل ",
-                      //   style: TextStyle(
-                      //     color: Color(0xFF163D66),
-                      //     fontSize: 18.sp,
-                      //   ),
-                      // ),
-                      //
-                    ],
-                  ),
+                    ),
+
+                  ],
                 ),
-                SizedBox(
-                  height: 25.h,
-                ),
-                ListView.builder(
+              ),
+              SizedBox(
+                height: 25.h,
+              ),
+              Expanded(
+                child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemCount: 5,
                     itemBuilder: (context, index) {
                       return customCoursesCard(context);
                     }),
-                customCoursesCard(
-                  context,
-                )
-              ],
-            ),
+              ),
+
+            ],
           ),
         ));
   }
@@ -134,14 +125,7 @@ Widget customCoursesCard(
       borderRadius: BorderRadius.circular(
         15,
       ),
-      // boxShadow: [
-      //   BoxShadow(
-      //     color: Colors.grey.withOpacity(0.1),
-      //     spreadRadius: 6,
-      //     blurRadius: 3,
-      //     offset: Offset(1, 1),
-      //   )
-      // ],
+
     ),
     child: Column(
       children: [
