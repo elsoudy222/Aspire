@@ -1,4 +1,6 @@
 import 'package:aspire_edu/view-model/cubits/app_cubit/appcubit_cubit.dart';
+import 'package:aspire_edu/view-model/cubits/home_cubit/home_cubit.dart';
+import 'package:aspire_edu/view-model/database/network/end_points.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
@@ -64,10 +66,10 @@ class _MyCarouselWidgetState extends State<MyCarouselWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppCubit, AppStates>(
+    return BlocBuilder<HomeCubit, HomeStates>(
       builder: (context, state) {
-        var cubit = AppCubit.get(context);
-        print(cubit.bannersModel.toString());
+        var cubit = HomeCubit.get(context);
+        print(cubit.bannersModel);
         return ConditionalBuilder(
           condition:  cubit.bannersModel.isNotEmpty,
           builder: (context) => Column(
@@ -81,7 +83,7 @@ class _MyCarouselWidgetState extends State<MyCarouselWidget> {
                       profName: "${e.subTitle}",
                       subtitle: "${e.aboutNews}",
                       // TODO :
-                      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRv4UK-VacVrppny4aGjzhWStSrcsP_6A1UdFvRLCMg&s",
+                          image: "${baseImage}${e.newsPhoto}",
                     ),
                   )
                       .toList(),
@@ -109,24 +111,18 @@ class _MyCarouselWidgetState extends State<MyCarouselWidget> {
             ],
           ),
           fallback: (context) => Container(
-            margin: EdgeInsets.symmetric(
+            margin: const EdgeInsets.symmetric(
               horizontal: 5,
             ),
             height: 130.h,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: AppColors.primaryColor,
+             // color: AppColors.primaryColor,
               borderRadius: BorderRadius.circular(12),
 
             ),
             child: Center(
-              child: Text(
-                "There is no News Yet",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25.sp
-                ),
-              ),
+              child: CircularProgressIndicator.adaptive(),
             ),
           ),
         );

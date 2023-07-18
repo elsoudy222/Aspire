@@ -4,34 +4,32 @@ part of 'appcubit_cubit.dart';
 abstract class AppStates {}
 
 class AppInitialState extends AppStates {}
-class LoadingBannersState extends AppStates {}
-class SuccessBannersState extends AppStates {}
-class FailedBannersState extends AppStates {
-  final String error;
-  FailedBannersState(this.error);
-}
+
+class SuccessSelectArabicState extends AppStates {}
+class SuccessSelectLanguageState extends AppStates {}
+class SuccessSelectTeacherState extends AppStates {}
 
 
-
-class LoadingFamousState extends AppStates {}
-class SuccessFamousState extends AppStates {}
-class FailedFamousState extends AppStates {
-  final String error;
-  FailedFamousState(this.error);
-}
+class ChangeLevelIndexState extends AppStates {}
+class ChangeSubjectIndexState extends AppStates {}
+class ChangeTeacherIndexState extends AppStates {}
 
 
-class LoadingCoursesState extends AppStates {}
-class SuccessCoursesState extends AppStates {}
-class FailedCoursesState extends AppStates {
-  final String error;
-  FailedCoursesState(this.error);
-}
-
-
+// ************ Get All Materials: ***************
 class LoadingGetMaterialsState extends AppStates {}
-class SuccessGetMaterialsState extends AppStates {}
+class SuccessGetMaterialsState extends AppStates {
+  final List<dynamic> materials;
+  SuccessGetMaterialsState(this.materials);
+}
 class FailedGetMaterialsState extends AppStates {
   final String error;
   FailedGetMaterialsState(this.error);
+}
+
+// ************ Get All Teachers: ***************
+class LoadingGetTeachersState extends AppStates {}
+class SuccessGetTeachersState extends AppStates {}
+class FailedGetTeachersState extends AppStates {
+  final String error;
+  FailedGetTeachersState(this.error);
 }

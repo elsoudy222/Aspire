@@ -1,10 +1,17 @@
+import 'dart:ui';
+
+import 'package:aspire_edu/core/constants/app_colors/app_colors.dart';
 import 'package:aspire_edu/model/courses_model.dart';
 import 'package:aspire_edu/model/famous_model.dart';
+import 'package:aspire_edu/model/teachers_model.dart';
+import 'package:aspire_edu/view-model/database/local/cache_helper.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 
 import '../../../model/home_model.dart';
+import '../../../model/stage_levels_model.dart';
 import '../../database/network/dio_helper.dart';
 import '../../database/network/end_points.dart';
 
@@ -13,83 +20,125 @@ part 'appcubit_state.dart';
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitialState());
 
-  static AppCubit get(context)=> BlocProvider.of(context);
+  static AppCubit get(context)=> BlocProvider.of(context,listen: false);
+
+  late int currentLevelIndex;
+  void changeLevelIndex(int index){
+    currentLevelIndex = index;
+    emit(ChangeLevelIndexState());
+  }
 
 
+  late int currentSubjectIndex;
+  void changeSubjectIndex(int index){
+    currentSubjectIndex = index;
+    emit(ChangeSubjectIndexState());
+  }
 
-  List<BannersModel> bannersModel =[];
-  void getBanners() {
-    emit(LoadingBannersState());
-    DioHelper.getData(
-      url: newFeed,
-    ).then((value) {
-      for(var banner in value.data ){
-        bannersModel.add(BannersModel.fromJson(banner));
-      }
+  late int currentTeacherIndex;
+  void changeTeacherIndex(int index){
+    currentTeacherIndex = index;
+    emit(ChangeTeacherIndexState());
+  }
 
-      print(bannersModel.toString());
+  String teacherValue ="";
+  bool isTeacherSelected = false;
 
-      emit(SuccessBannersState());
+  void teacherSelected(value){
+    //index = currentTeacherIndex;
+    isTeacherSelected = true;
+    teacherValue = value;
+    emit(SuccessSelectTeacherState());
+    print(teacherValue);
+    print(isTeacherSelected);
+  }
 
-    }).catchError((error) {
-      print(error.toString());
-      emit(FailedBannersState(error.toString()));
-    });
+
+  List<StageAndLevelsModel> stage= [
+    StageAndLevelsModel(
+        stage: 'المرحلة الابتدائية',
+        levelTitle: [
+          "الصف الاول",
+          "الصف الثاني",
+          "الصف الثالث",
+          "الصف الرابع",
+          "الصف خامس",
+          "الصف السادس",
+        ],
+        levelTitleData: [
+          "الصف الاول الابتدائي",
+          "الصف الثانى الابتدائي",
+          "الصف الثالث الابتدائي",
+          "الصف الرابع الابتدائي",
+          "الصف الخامس الابتدائي",
+          "الصف السادس الابتدائي",
+        ]
+    ),
+    StageAndLevelsModel(
+      stage: 'المرحلة الاعدادية',
+      levelTitle: [
+        "الصف الاول",
+        "الصف الثاني",
+        "الصف الثالث",
+      ],
+      levelTitleData: [
+        "الصف الاول الاعدادي",
+        "الصف الثانى الاعدادي",
+        "الصف الثالث الاعدادي",
+      ],
+    ),
+    StageAndLevelsModel(
+      stage: 'المرحلة الثانوية',
+      levelTitle: [
+        "الصف الاول",
+        "الصف الثاني",
+        "الصف الثالث",
+      ],
+      levelTitleData: [
+        "الصف الاول الثانوى",
+        "الصف الثانى الثانوى",
+        "الصف الثالث الثانوى",
+      ],
+    ),
+  ];
+
+
+late  String section = "";
+ bool sectionSelected = false;
+final Color sectionTextColor = AppColors.primaryColor;
+  bool isArabic = false;
+  bool isLange = false;
+
+
+void arabicSelected(){
+  sectionSelected = true;
+
+  section = "arabic";
+
+  emit(SuccessSelectArabicState());
+ print(section);
+ print(sectionSelected);
+
+}
+  void langSelected(){
+    sectionSelected = true;
+    section = "language" ;
+    emit(SuccessSelectLanguageState());
+    print(section);
+    print(sectionSelected);
+
   }
 
 
 
- List<FamousModel> famousModel = [];
-  void getFamous() {
-    emit(LoadingFamousState());
-    DioHelper.getData(
-      url: famous,
-    ).then((value) {
-
-      for(var famous in value.data ){
-        famousModel.add(FamousModel.fromJson(famous));
-      }
-      print(famousModel.toString());
-
-      emit(SuccessFamousState());
-
-    }).catchError((error) {
-      print(error.toString());
-      emit(FailedFamousState(error.toString()));
-    });
-  }
-
-
-  List<CoursesModel> courseModel = [];
-  void getAllCourses() {
-    emit(LoadingFamousState());
-    DioHelper.getData(
-      url: courses,
-    ).then((value) {
-
-      for(var famous in value.data ){
-        courseModel.add(CoursesModel.fromJson(famous));
-      }
-      print(courseModel.toString());
-
-      emit(SuccessFamousState());
-
-    }).catchError((error) {
-      print(error.toString());
-      emit(FailedFamousState(error.toString()));
-    });
-  }
-
-
-
-
-  List<String> materialModel =[];
   void getAllMaterials({
     required String lang,
     required String eduClass,
   }){
 
     emit(LoadingGetMaterialsState());
+    print(lang);
+    print(eduClass);
     DioHelper.postData(
         url: materials,
         data:{
@@ -97,12 +146,50 @@ class AppCubit extends Cubit<AppStates> {
           'educlass':eduClass,
         }
     ).then((value){
-      materialModel.addAll(value.data);
-      print("DAta ************** ${value.data}");
-      print("Data Materials ************** ${materialModel}");
-      emit(SuccessGetMaterialsState());
+
+     var material = value.data;
+
+
+      emit(SuccessGetMaterialsState(material));
+
+      print("Materials ************** ${value.data}");
+
     }).catchError((error){
+      print("Material Error ************** ${error}");
       emit(FailedGetMaterialsState(error.toString()));
+    });
+  }
+
+
+ List <TeachersModel> teachersModel = [];
+  void getAllTeachers({
+    required String lang,
+    required String eduClass,
+    required String materialName
+  }){
+    emit(LoadingGetTeachersState());
+    print(lang);
+    print(eduClass);
+    print(materialName);
+    DioHelper.postData(
+        url: teachers,
+        data:{
+          'lang':lang,
+          'educlass':eduClass,
+          "matrialNm" : materialName
+        }
+    ).then((value){
+      for(var teacher in value.data){
+        teachersModel.add(TeachersModel.fromJson(teacher));
+      }
+      emit(SuccessGetTeachersState());
+
+      print("Teachers: ************** ${value.data}");
+
+    }).catchError((error){
+
+      print("Teachers Error ************** ${error}");
+      emit(FailedGetTeachersState(error.toString()));
     });
 
   }

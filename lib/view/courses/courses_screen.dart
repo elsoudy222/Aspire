@@ -1,4 +1,6 @@
 import 'package:aspire_edu/view-model/cubits/app_cubit/appcubit_cubit.dart';
+import 'package:aspire_edu/view-model/cubits/courses_cubit/courses_cubit.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +11,7 @@ import '../../core/components/custom_scaffold.dart';
 import '../../core/components/custom_send_form_dialog.dart';
 import '../../core/constants/app_colors/app_colors.dart';
 import '../../core/constants/data/data.dart';
+import '../../view-model/database/network/end_points.dart';
 
 class CoursesScreen extends StatelessWidget {
   const CoursesScreen({super.key});
@@ -16,78 +19,86 @@ class CoursesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-
         appBarCustom: CustomAppBar(
           icon: Icons.arrow_back_outlined,
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        body: BlocProvider(
-          create: (context) => AppCubit()..getAllCourses(),
-          child: BlocConsumer<AppCubit, AppStates>(
-            listener: (context, state) {
-              // TODO: implement listener
-            },
-            builder: (context, state) {
-              var cubit = AppCubit.get(context);
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.0.w, vertical: 20.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "الكورسات",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF0D001D),
-                              fontSize: 25.sp,
-                            ),
+        body: BlocConsumer<CoursesCubit, CoursesStates>(
+          listener: (context, state) {
+            // TODO: implement listener
+          },
+          builder: (context, state) {
+            var courseCubit = CoursesCubit.get(context);
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15.0.w, vertical: 20.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "الكورسات",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF0D001D),
+                            fontSize: 25.sp,
                           ),
-                          SizedBox(
-                            height: 10.h,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "توفر المنصة أفضل الكورسات في مختلف المجالات.",
+                          style: TextStyle(
+                            color: Color(0xFF163D66),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20.sp,
                           ),
-                          Text(
-                            "توفر المنصة أفضل الكورسات في مختلف المجالات.",
-                            style: TextStyle(
-                              color: Color(0xFF163D66),
-                              fontWeight: FontWeight.w600,
-                              fontSize: 20.sp,
-                            ),
-                          ),
-
-                        ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 25.h,
+                  ),
+                  ConditionalBuilder(
+                    condition: state is! LoadingCoursesState,
+                    builder: (context) {
+                      return Expanded(
+                        child: ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: courseCubit.courseModel.length,
+                            itemBuilder: (context, index) {
+                              return customCoursesCard(context,
+                                  courseTitle:
+                                  courseCubit.courseModel[index].courseName!,
+                                  instructor:
+                                  courseCubit.courseModel[index].trainerName!,
+                                  image:
+                                  "${baseImage}${courseCubit.courseModel[index].coursePhoto}");
+                            }),
+                      );
+                    },
+                    fallback: (context) => SizedBox(
+                      height: MediaQuery.of(context).size.height/2,
+                      child: Center(
+                        child: CircularProgressIndicator.adaptive(
+                          strokeWidth: 5,
+                        ),
                       ),
                     ),
-                    SizedBox(
-                      height: 25.h,
-                    ),
-                    Expanded(
-                      child: ListView.builder(
+                  ),
 
-                          scrollDirection: Axis.vertical,
-                         shrinkWrap: true,
-                          itemCount: cubit.courseModel.length,
-                          itemBuilder: (context, index) {
-                            return customCoursesCard(
-                              context,
-                              courseTitle: cubit.courseModel[index].courseName!,
-                              instructor: cubit.courseModel[index].trainerName!,
-                              image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRv4UK-VacVrppny4aGjzhWStSrcsP_6A1UdFvRLCMg&s",
-                            );
-                          }),
-                    ),
-
-                  ],
-                ),
-              );
-            },
-          ),
+                ],
+              ),
+            );
+          },
         ));
   }
 }
@@ -111,6 +122,7 @@ Widget customCoursesCard(
     ),
     child: Column(
       children: [
+
         Image(
           image: NetworkImage(image),
           width: double.infinity,
@@ -160,7 +172,7 @@ Widget buttonWidget(
           builder: (context) {
             return CustomSendingFormDialog(
               title: ' كورس الالماني',
-              instructor: ' مع هير محمد عويس',
+
             );
           });
     },

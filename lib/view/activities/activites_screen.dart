@@ -1,5 +1,3 @@
-import 'package:aspire_edu/view-model/cubits/app_cubit/appcubit_cubit.dart';
-import 'package:aspire_edu/view-model/cubits/famous_cubit/famous_cubit.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,28 +9,28 @@ import '../../core/components/custom_scaffold.dart';
 import '../../core/components/custom_send_form_dialog.dart';
 import '../../core/constants/app_colors/app_colors.dart';
 import '../../core/constants/data/data.dart';
+import '../../view-model/cubits/activities_cubit/activity_cubit.dart';
 import '../../view-model/database/network/end_points.dart';
 
-class FamousScreen extends StatelessWidget {
-  const FamousScreen({super.key});
+class ActivitiesScreen extends StatelessWidget {
+  const ActivitiesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-        appBarCustom: CustomAppBar(
-          icon: Icons.arrow_back_outlined,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        body: BlocConsumer<FamousCubit, FamousStates>(
-          listener: (context, state) {
-            // TODO: implement listener
-          },
-          builder: (context, state) {
-            var famousCubit = FamousCubit.get(context);
-            print(famousCubit.famousModel);
-            return Padding(
+    return BlocConsumer<ActivityCubit, ActivityStates>(
+      listener: (context, state) {
+        // TODO: implement listener
+      },
+      builder: (context, state) {
+        var activityCubit = ActivityCubit.get(context);
+        return CustomScaffold(
+            appBarCustom: CustomAppBar(
+              icon: Icons.arrow_back_outlined,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            body: Padding(
               padding: EdgeInsets.symmetric(horizontal: 15.0.w, vertical: 20.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,36 +41,44 @@ class FamousScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "مشاهير",
+                          "انشطة اخرى",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF0D001D),
                             fontSize: 25.sp,
                           ),
                         ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "يمكنك حجز كل الانشطه المتاحة من خلالنا",
+                          style: TextStyle(
+                            color: Color(0xFF163D66),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20.sp,
+                          ),
+                        ),
                       ],
                     ),
                   ),
                   SizedBox(
-                    height: 20.h,
+                    height: 25.h,
                   ),
                   ConditionalBuilder(
-                    condition: state is! LoadingFamousState,
+                    condition: state is! LoadingActivitiesState,
                     builder: (context){
                       return  Expanded(
                         child: ListView.builder(
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
-                            itemCount: famousCubit.famousModel.length,
+                            itemCount: activityCubit.activityModel.length,
                             itemBuilder: (context, index) {
-                              print(famousCubit.famousModel);
-                              return customFamousCard(context,
-                                  instructor:
-                                  famousCubit.famousModel[index].celeName!,
-                                  subtitle:
-                                  famousCubit.famousModel[index].aboutcele!,
-                                  image:
-                                  "${baseImage}${famousCubit.famousModel[index].celePhoto}");
+                              return customActivityCard(
+                                context,
+                                activityTitle: activityCubit.activityModel[index].actvName!,
+                                image: "${baseImage}${activityCubit.activityModel[index].actvPhoto!}" ,
+                              );
                             }),
                       );
                     },
@@ -88,9 +94,9 @@ class FamousScreen extends StatelessWidget {
 
                 ],
               ),
-            );
-          },
-        ));
+            ));
+      },
+    );
   }
 }
 
@@ -105,7 +111,7 @@ Widget buttonWidget(
           context: context,
           builder: (context) {
             return CustomSendingFormDialog(
-              title: 'ندوة',
+              title: ' تأجير قاعات',
 
             );
           });
@@ -131,10 +137,9 @@ Widget buttonWidget(
   );
 }
 
-Widget customFamousCard(
+Widget customActivityCard(
   context, {
-  required String instructor,
-  required String subtitle,
+  required String activityTitle,
   required String image,
   VoidCallback? onTap,
 }) {
@@ -143,7 +148,7 @@ Widget customFamousCard(
     width: double.infinity,
     margin: EdgeInsets.symmetric(vertical: 5.h),
     decoration: BoxDecoration(
-      color: AppColors.primaryColor,
+      color: Colors.white,
       borderRadius: BorderRadius.circular(
         15,
       ),
@@ -151,44 +156,29 @@ Widget customFamousCard(
     child: Column(
       children: [
         Image(
-          image: NetworkImage(image),
+          image: AssetImage(image),
           width: double.infinity,
-          height: 185.h,
+          height: 180.h,
           fit: BoxFit.cover,
         ),
-
-        // SvgPicture.asset("assets/svg/yasser.svg"),
         Padding(
-          padding: EdgeInsets.only(right: 6.0.w, left: 6.0.w, top: 10.h),
-          child: Column(
+          padding: EdgeInsets.only(
+              right: 6.0.w, left: 6.0.w, top: 10.h, bottom: 10.h),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 children: [
                   Text(
-                    instructor,
+                    activityTitle,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20.sp,
-                        color: Colors.white),
-                  ),
-                  SizedBox(
-                    height: 7.h,
-                  ),
-                  Text(
-                    subtitle,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18.sp, color: Colors.white),
-                  ),
-                  SizedBox(
-                    height: 10.h,
+                        color: AppColors.primaryColor),
                   ),
                 ],
               ),
-              buttonWidget(context, title: "احجز الآن"),
-              SizedBox(
-                height: 10.h,
-              ),
+              buttonWidget(context, title: "احجز الآن")
             ],
           ),
         )
