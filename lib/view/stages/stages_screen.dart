@@ -19,25 +19,21 @@ import '../../core/constants/data/data.dart';
 class StagesScreen extends StatelessWidget {
   StagesScreen({super.key});
 
-
   bool isSelected = false;
-
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
-      listener: (context, state) {
-
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         var appCubit = AppCubit.get(context);
         return CustomScaffold(
             appBarCustom: CustomAppBar(
               icon: Icons.arrow_back_outlined,
               onPressed: () {
+                appCubit.section = null;
                 Navigator.pop(context);
-
-
+                print(appCubit.section);
               },
             ),
             body: Padding(
@@ -87,8 +83,9 @@ class StagesScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w600,
-                      color:  state is SuccessSelectLanguageState || state is SuccessSelectArabicState? appCubit.sectionTextColor : Colors.red,
-
+                      color: appCubit.section == null
+                          ? Colors.red
+                          : appCubit.sectionTextColor,
                     ),
                   ),
                   SizedBox(
@@ -99,8 +96,8 @@ class StagesScreen extends StatelessWidget {
                     children: [
                       buttonWidget(
                         title: "عربي",
-                        color: state is SuccessSelectArabicState
-                            ? AppColors.primaryColor
+                        color: appCubit.section == "arabic"
+                            ?  AppColors.primaryColor
                             : Colors.grey,
                         onTap: () {
                           appCubit.arabicSelected();
@@ -108,7 +105,7 @@ class StagesScreen extends StatelessWidget {
                       ),
                       buttonWidget(
                         title: "لغات",
-                        color: state is SuccessSelectLanguageState
+                        color: appCubit.section == "language"
                             ? AppColors.primaryColor
                             : Colors.grey,
                         onTap: () {
@@ -133,60 +130,48 @@ class StagesScreen extends StatelessWidget {
                       itemBuilder: (context, i) {
                         return CustomStageCard(
                           stageTitle: appCubit.stage[i].stage,
-                          levelsTitle: appCubit.stage[i].levelTitle,
-                          postData: appCubit.stage[i].levelTitleData,
                           onTap: () {
                             // to store the index:
                             appCubit.changeLevelIndex(i);
 
-                            navigator(context, LevelsScreen(
-                              levelTitle: appCubit.stage[i].levelTitle,
-                              stageTitle: appCubit.stage[i].stage,
-                              levelsApiData: appCubit.stage[i].levelTitleData,
-                            ));
+                            appCubit.section == null
+                                ? ScaffoldMessenger.of(context).showSnackBar(
+                                     SnackBar(
+                                      content: Center(
+                                        child: Text(
+                                          "برجاء اختيار الشعبة",
+                                          style: TextStyle(
+                                            fontSize: 22.sp
+                                          ),
+                                        ),
+                                      ),
 
+                                      backgroundColor: Colors.red,
+                                      dismissDirection: DismissDirection.down,
+                                      duration: Duration(milliseconds: 500),
+                                    ),
+                                  )
+                                : navigator(
+                                    context,
+                                    LevelsScreen(
+                                      levelTitle: appCubit.stage[i].levelTitle,
+                                      stageTitle: appCubit.stage[i].stage,
+                                      levelsApiData:
+                                          appCubit.stage[i].levelTitleData,
+                                      lang: appCubit.section!,
+                                    ));
                           },
                         );
                       },
                     ),
                   ),
 
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //   children: [
-                  //     customStagesCard(
-                  //       context,
-                  //       title: appCubit.stage[0].stage,
-                  //       levelsTitle: appCubit.stage[0].levelTitle,
-                  //       postData: appCubit.stage[0].levelTitleData,
-                  //     ),
-                  //     SizedBox(
-                  //       width: 10.w,
-                  //     ),
-                  //     customStagesCard(
-                  //       context,
-                  //       title: appCubit.stage[1].stage,
-                  //       levelsTitle: appCubit.stage[1].levelTitle,
-                  //       postData: appCubit.stage[1].levelTitleData,
-                  //     ),
-                  //   ],
-                  // ),
-                  // SizedBox(
-                  //   height: 35.h,
-                  // ),
-                  // customStagesCard(
-                  //   context,
-                  //   title: appCubit.stage[2].stage,
-                  //   levelsTitle: appCubit.stage[2].levelTitle,
-                  //   postData: appCubit.stage[2].levelTitleData,
-                  // ),
                 ],
               ),
             ));
       },
     );
   }
-
 }
 
 Widget buttonWidget({
@@ -201,9 +186,7 @@ Widget buttonWidget({
       width: 120.w,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius
-            .circular(30)
-            .w,
+        borderRadius: BorderRadius.circular(30).w,
       ),
       child: Center(
         child: Text(

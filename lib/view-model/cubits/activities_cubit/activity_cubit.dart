@@ -35,4 +35,34 @@ class ActivityCubit extends Cubit<ActivityStates> {
   }
 
 
+  void sendActivityFormData({
+    required String activityName,
+    required String studentName,
+    required String studentNumber,
+    required String notes,
+  }){
+    emit(LoadingSendActivityFormDataState());
+    DioHelper.postData(
+        url: sendActivityForm,
+        data:{
+          "actvName"  : activityName,
+          "clientName" : studentName ,
+          "clientPhone": studentNumber,
+          "message"  :  notes,
+        }
+    ).then((value){
+      print("Success Sent Famous Data : ************** ${value.data}");
+      emit(SuccessSendActivityFormDataState());
+      // await Future.delayed(Duration(seconds: 5),(){
+      //
+      // });
+    }
+    ).catchError((error){
+      print(" Error Send Data ************** ${error}");
+      emit(FailedSendActivityFormDataState(error.toString()));
+    });
+
+  }
+
+
 }

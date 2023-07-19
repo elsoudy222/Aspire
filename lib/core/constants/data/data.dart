@@ -14,3 +14,6 @@ const String coursesScreen = 'coursesScreen';
 const String famousScreen = 'famousScreen';
 const String activityScreen = 'activityScreen';
 
+/// **************** { Validation } *******************
+String validationName = r'^[a-z A-Z]+$';
+String validationPhone = r'(^(?:[+0]9)?[0-9]{10,12}$)';

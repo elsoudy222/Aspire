@@ -89,7 +89,7 @@ class LessonsScreen extends StatelessWidget {
                           onTap: () {
                             cubit.changeSubjectIndex(i);
                             cubit.getAllTeachers(
-                              lang: cubit.section,
+                              lang: cubit.section!,
                               eduClass: lessonsApiData[cubit.currentLevelIndex],
                               materialName: subject[i],
                             );

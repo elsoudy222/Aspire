@@ -12,3 +12,12 @@ class FailedFamousState extends FamousStates {
   final String error;
   FailedFamousState(this.error);
 }
+
+
+// ************ Send Famous Form Data: ***************
+class LoadingSendFamousFormDataState extends FamousStates {}
+class SuccessSendFamousFormDataState extends FamousStates {}
+class FailedSendFamousFormDataState extends FamousStates {
+  final String error;
+  FailedSendFamousFormDataState(this.error);
+}

@@ -11,3 +11,12 @@ class FailedCoursesState extends CoursesStates {
   final String error;
   FailedCoursesState(this.error);
 }
+
+
+// ************ Send Courses Form Data: ***************
+class LoadingSendCourseFormDataState extends CoursesStates {}
+class SuccessSendCourseFormDataState extends CoursesStates {}
+class FailedSendCourseFormDataState extends CoursesStates {
+  final String error;
+  FailedSendCourseFormDataState(this.error);
+}

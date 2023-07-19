@@ -33,3 +33,12 @@ class FailedGetTeachersState extends AppStates {
   final String error;
   FailedGetTeachersState(this.error);
 }
+
+// ************ Send Material Form Data: ***************
+class LoadingSendMaterialFormDataState extends AppStates {}
+class SuccessSendMaterialFormDataState extends AppStates {}
+class FailedSendMaterialFormDataState extends AppStates {
+  final String error;
+  FailedSendMaterialFormDataState(this.error);
+}
+

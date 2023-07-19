@@ -32,4 +32,33 @@ class CoursesCubit extends Cubit<CoursesStates> {
       emit(FailedCoursesState(error.toString()));
     });
   }
+
+  void sendCoursesFormData({
+    required String courseName,
+    required String studentName,
+    required String studentNumber,
+    required String notes,
+  }){
+    emit(LoadingSendCourseFormDataState());
+    DioHelper.postData(
+        url: sendCourseForm,
+        data:{
+          "courseName"  : courseName,
+          "clientName" : studentName ,
+          "clientPhone": studentNumber,
+          "message"  :  notes,
+        }
+    ).then((value){
+      print("Success Sent Famous Data : ************** ${value.data}");
+      emit(SuccessSendCourseFormDataState());
+      // await Future.delayed(Duration(seconds: 5),(){
+      //
+      // });
+    }
+    ).catchError((error){
+      print(" Error Send Data ************** ${error}");
+      emit(FailedSendCourseFormDataState(error.toString()));
+    });
+
+  }
 }

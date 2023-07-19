@@ -1,3 +1,4 @@
+import 'package:aspire_edu/view/activities/widgets/custom_activity_card.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,11 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../core/components/custom_appbar.dart';
+import '../../core/components/custom_button.dart';
 import '../../core/components/custom_scaffold.dart';
 import '../../core/components/custom_send_form_dialog.dart';
 import '../../core/constants/app_colors/app_colors.dart';
 import '../../core/constants/data/data.dart';
 import '../../view-model/cubits/activities_cubit/activity_cubit.dart';
+import '../../view-model/cubits/app_cubit/appcubit_cubit.dart';
 import '../../view-model/database/network/end_points.dart';
 
 class ActivitiesScreen extends StatelessWidget {
@@ -17,12 +20,79 @@ class ActivitiesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var activityCubit = ActivityCubit.get(context);
     return BlocConsumer<ActivityCubit, ActivityStates>(
       listener: (context, state) {
-        // TODO: implement listener
+        if(state is SuccessSendActivityFormDataState){
+          Navigator.pop(context);
+          // Then Show the New Dialog
+          showDialog(
+              context: context,
+              builder: (context){
+                return Dialog(
+                  backgroundColor: Colors.transparent,
+                  child: Container(
+                    padding: EdgeInsets.all(25),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image(
+                          image:
+                          AssetImage("assets/images/congratiolations.png"),
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Text(
+                          "تم الارسال",
+                          style: TextStyle(
+                            fontSize: 30.sp,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        Text(
+                          "سيتم التواصل معك لتاكيد حجزك",
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.w, vertical: 15.h),
+                          child: CustomButton(
+                              title: "الرئيسية",
+                              color: AppColors.secondaryColor,
+                              onTap: () {
+                                AppCubit.get(context).fullNameController.clear();
+                                AppCubit.get(context).phoneController.clear();
+                                AppCubit.get(context).notesController.clear();
+                                Navigator.pushNamedAndRemoveUntil(context, homeScreen, (route) => false,);
+
+
+
+                              }),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              });
+        }
       },
       builder: (context, state) {
-        var activityCubit = ActivityCubit.get(context);
+
         return CustomScaffold(
             appBarCustom: CustomAppBar(
               icon: Icons.arrow_back_outlined,
@@ -74,10 +144,49 @@ class ActivitiesScreen extends StatelessWidget {
                             shrinkWrap: true,
                             itemCount: activityCubit.activityModel.length,
                             itemBuilder: (context, index) {
-                              return customActivityCard(
-                                context,
+                              return CustomActivityCard(
                                 activityTitle: activityCubit.activityModel[index].actvName!,
-                                image: "${baseImage}${activityCubit.activityModel[index].actvPhoto!}" ,
+                                image: "${baseImage}${activityCubit.activityModel[index].actvPhoto!}",
+
+                                onTap: () {
+                                  print("tapped");
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        var activityName = activityCubit.activityModel[index].actvName!;
+                                        return CustomSendingFormDialog(
+                                          title: 'انت دلوقتي ${activityName} من خلالنا',
+                                          button: ConditionalBuilder(
+                                            condition: state
+                                            is! LoadingSendActivityFormDataState,
+                                            builder: (context) => CustomButton(
+                                              title: "ارسال",
+                                              color: AppColors.secondaryColor,
+                                              onTap: () {
+                                                ///============== Post Request:==================
+                                                activityCubit.sendActivityFormData(
+                                                  activityName: activityCubit.activityModel[index].actvName!,
+                                                  studentName: AppCubit.get(context).fullNameController.text,
+                                                  studentNumber: AppCubit.get(context).phoneController.text,
+                                                  notes: AppCubit.get(context).notesController.text,
+                                                );
+
+                                                print(activityCubit.activityModel[index].actvName!);
+                                                print(AppCubit.get(context).fullNameController.text);
+                                                print(AppCubit.get(context).phoneController.text);
+                                                print(AppCubit.get(context).notesController.text);
+
+                                                /// ===========================================================
+                                              },
+                                            ),
+                                            fallback: (context) => const Center(
+                                              child:
+                                              CircularProgressIndicator(),
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                } ,
                               );
                             }),
                       );
@@ -103,6 +212,7 @@ class ActivitiesScreen extends StatelessWidget {
 Widget buttonWidget(
   context, {
   required String title,
+
 }) {
   return GestureDetector(
     onTap: () {
@@ -112,6 +222,7 @@ Widget buttonWidget(
           builder: (context) {
             return CustomSendingFormDialog(
               title: ' تأجير قاعات',
+               button: Container(),
 
             );
           });
@@ -178,7 +289,7 @@ Widget customActivityCard(
                   ),
                 ],
               ),
-              buttonWidget(context, title: "احجز الآن")
+              buttonWidget(context, title: "احجز الآن",  )
             ],
           ),
         )

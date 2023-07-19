@@ -16,12 +16,13 @@ class LevelsScreen extends StatelessWidget {
   final List<String> levelTitle;
   final List<String> levelsApiData;
   final String stageTitle;
+  final String lang;
 
   LevelsScreen({
     super.key,
     required this.levelTitle,
     required this.stageTitle,
-    required this.levelsApiData,
+    required this.levelsApiData, required this.lang,
 
   });
 
@@ -34,7 +35,6 @@ class LevelsScreen extends StatelessWidget {
             return LessonsScreen(
               subject: state.materials,
               lessonsApiData: levelsApiData,
-
             );
           }));
         }
@@ -47,6 +47,8 @@ class LevelsScreen extends StatelessWidget {
             icon: Icons.arrow_back_outlined,
             onPressed: () {
               Navigator.pop(context);
+              print(appCubit.section);
+
             },
           ),
           body: Padding(
@@ -72,7 +74,7 @@ class LevelsScreen extends StatelessWidget {
                           height: 10.h,
                         ),
                         Text(
-                          "كل ما ستحتاجه من دروس\nفى ${stageTitle} لجميع الصفوف ",
+                          "كل ما ستحتاجه من دروس فى \n${stageTitle} لجميع الصفوف",
                           style: TextStyle(
                             color: Color(0xFF163D66),
                             fontWeight: FontWeight.w500,
@@ -98,7 +100,7 @@ class LevelsScreen extends StatelessWidget {
                               appCubit.changeLevelIndex(i);
 
                               appCubit.getAllMaterials(
-                                lang: appCubit.section,
+                                lang: appCubit.section!,
                                 eduClass: levelsApiData[appCubit.currentLevelIndex],
                               );
                             },

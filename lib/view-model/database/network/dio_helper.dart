@@ -35,13 +35,12 @@ class DioHelper{
 
   })async{
     dio!.options.headers={
-
       "Content-Type" : "application/json",
     };
     return await dio!.post(
       url,
-
       data: data,
+
     );
   }
 

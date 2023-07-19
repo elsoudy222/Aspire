@@ -10,21 +10,14 @@ class CustomStageCard extends StatelessWidget {
 
    final String stageTitle;
  final VoidCallback onTap;
-  final   List<String>  levelsTitle;
-   final   List<String>   postData;
-   CustomStageCard({super.key, required this.stageTitle, required this.onTap, required this.levelsTitle, required this.postData});
+
+   CustomStageCard({
+     super.key, required this.stageTitle, required this.onTap, });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        navigator(context, LevelsScreen(
-          levelTitle: levelsTitle,
-          stageTitle: stageTitle,
-          levelsApiData: postData,
-        ));
-
-      },
+      onTap: onTap,
       child: Container(
         height: 140.h,
         width: 160.w,

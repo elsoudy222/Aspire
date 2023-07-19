@@ -4,8 +4,8 @@ import 'package:aspire_edu/view-model/cubits/courses_cubit/courses_cubit.dart';
 import 'package:aspire_edu/view-model/cubits/famous_cubit/famous_cubit.dart';
 import 'package:aspire_edu/view-model/cubits/home_cubit/home_cubit.dart';
 import 'package:aspire_edu/view-model/database/local/cache_helper.dart';
+import 'package:aspire_edu/view-model/database/local/observer.dart';
 import 'package:aspire_edu/view-model/database/network/dio_helper.dart';
-import 'package:aspire_edu/view/TEST_APIS/test_apis.dart';
 import 'package:aspire_edu/view/activities/activites_screen.dart';
 import 'package:aspire_edu/view/courses/courses_screen.dart';
 import 'package:aspire_edu/view/famous/famous_screen.dart';
@@ -30,6 +30,7 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await CacheHelper.init();
   await DioHelper.init();
+  Bloc.observer = MyBlocObserver();
   runApp(
     MultiBlocProvider(
     providers: [
@@ -79,7 +80,6 @@ class MyApp extends StatelessWidget {
               secondSplashScreen : (context) => SecondSplashScreen(),
               homeScreen : (context) => HomeScreen(),
               stagesScreen : (context) =>  StagesScreen(),
-            //  lessonsScreen : (context) => LessonsScreen(),
               famousScreen : (context) => FamousScreen(),
               coursesScreen : (context) => CoursesScreen(),
               activityScreen : (context) => ActivitiesScreen(),

@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 
 import '../../../model/home_model.dart';
+import '../../../model/sent_form_model.dart';
 import '../../../model/stage_levels_model.dart';
 import '../../database/network/dio_helper.dart';
 import '../../database/network/end_points.dart';
@@ -20,7 +21,16 @@ part 'appcubit_state.dart';
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitialState());
 
-  static AppCubit get(context)=> BlocProvider.of(context,listen: false);
+  static AppCubit get(context)=> BlocProvider.of(context,);
+
+  TextEditingController fullNameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController notesController = TextEditingController();
+
+  FocusNode fullNameFocus = FocusNode();
+  FocusNode phoneFocus = FocusNode();
+  FocusNode notesFocus = FocusNode();
+
 
   late int currentLevelIndex;
   void changeLevelIndex(int index){
@@ -35,7 +45,7 @@ class AppCubit extends Cubit<AppStates> {
     emit(ChangeSubjectIndexState());
   }
 
-  late int currentTeacherIndex;
+   int? currentTeacherIndex;
   void changeTeacherIndex(int index){
     currentTeacherIndex = index;
     emit(ChangeTeacherIndexState());
@@ -103,11 +113,10 @@ class AppCubit extends Cubit<AppStates> {
   ];
 
 
-late  String section = "";
+  String? section;
  bool sectionSelected = false;
 final Color sectionTextColor = AppColors.primaryColor;
-  bool isArabic = false;
-  bool isLange = false;
+
 
 
 void arabicSelected(){
@@ -146,14 +155,13 @@ void arabicSelected(){
           'educlass':eduClass,
         }
     ).then((value){
+      if(value.statusCode == 200){
+        var material = value.data;
 
-     var material = value.data;
+        emit(SuccessGetMaterialsState(material));
 
-
-      emit(SuccessGetMaterialsState(material));
-
-      print("Materials ************** ${value.data}");
-
+        print("Materials ************** ${value.data}");
+      }
     }).catchError((error){
       print("Material Error ************** ${error}");
       emit(FailedGetMaterialsState(error.toString()));
@@ -194,6 +202,52 @@ void arabicSelected(){
 
   }
 
+
+
+  void sendMaterialFormData({
+    required String lang,
+    required String eduClass,
+    required String materialName,
+    required String teacherName,
+    required String studentName,
+    required String studentNumber,
+    required String notes,
+  }){
+
+    print(lang);
+    print(eduClass);
+    print(materialName);
+
+    emit(LoadingSendMaterialFormDataState());
+    DioHelper.postData(
+        url: sendMaterialForm,
+        data:{
+          'lang':lang,
+          'educlass':eduClass,
+          "matrialNm" : materialName,
+          "teacherName": teacherName,
+          "clientName" :  studentName,
+          "clientPhone": studentNumber,
+          "message"  :  notes,
+        }
+    ).then((value){
+
+
+        print("Success Sent Data : ************** ${value.data}");
+        emit(SuccessSendMaterialFormDataState());
+
+      // await Future.delayed(Duration(seconds: 5),(){
+      //
+      // });
+
+    }
+    ).catchError((error){
+
+      print(" Error Send Data ************** ${error}");
+      emit(FailedSendMaterialFormDataState(error.toString()));
+    });
+
+  }
 
 
 

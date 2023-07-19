@@ -14,9 +14,11 @@ class CustomTextFormFields extends StatefulWidget {
   final TextEditingController controller;
   final FocusNode? focus;
   final Function(String?)? onChanged;
-  final int verticalPadding;
-  final int horizontalPadding;
-  final int containerHeight;
+  final int topPadding;
+  final int bottomPadding;
+  final int rightPadding;
+  final int leftPadding;
+  final double radius;
 
   final int? minLines;
   final int? maxLines;
@@ -33,9 +35,14 @@ class CustomTextFormFields extends StatefulWidget {
     this.focus,
     this.onChanged,
     required bool enableInteractive,
-     this.verticalPadding = 6,
-     this.horizontalPadding = 13,
-     this.containerHeight = 50, this.minLines, this.maxLines,
+
+    this.minLines,
+    this.maxLines,
+     this.topPadding = 6,
+     this.bottomPadding = 6,
+     this.rightPadding = 13,
+     this.leftPadding = 13,
+    this.radius = 18,
   }) : super(key: key);
 
   @override
@@ -46,56 +53,63 @@ class _CustomTextFormFieldsState extends State<CustomTextFormFields> {
   //const CustomTextFormFields({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-     height: widget.containerHeight.h,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.grey)
-      ),
-      child: TextFormField(
-        minLines: widget.minLines,
-        maxLines: widget.maxLines,
-        controller: widget.controller,
-        focusNode: widget.focus,
-        textInputAction: widget.textInputAction ?? TextInputAction.done,
-        onEditingComplete: widget.onEditingComplete,
-        onChanged: (value) {
-          //onChanged!(value);
-          widget.onChanged != null ? widget.onChanged!(value) : null;
-        },
-        style: const TextStyle(
-            color: Colors.black
+    return TextFormField(
+      minLines: widget.minLines,
+      maxLines: widget.maxLines,
+      controller: widget.controller,
+      focusNode: widget.focus,
+      textInputAction: widget.textInputAction ?? TextInputAction.done,
+      onEditingComplete: widget.onEditingComplete,
+      onChanged: (value) {
+        //onChanged!(value);
+        widget.onChanged != null ? widget.onChanged!(value) : null;
+      },
+      style: const TextStyle(color: Colors.black),
+      cursorColor: AppColors.primaryColor,
+      decoration: InputDecoration(
+        fillColor: Colors.white,
+        filled: true,
+        isDense: true,
+        hintText: widget.hintText,
+
+        hintStyle: TextStyle(
+          fontSize: 16.sp,
+          color: Colors.grey,
         ),
-        cursorColor: AppColors.primaryColor,
-
-        decoration: InputDecoration(
-          fillColor: Colors.white,
-          filled: true,
-          isDense: true,
-
-          hintText: widget.hintText,
-          hintStyle:  TextStyle(
-            fontSize: 16.sp,
+        contentPadding: EdgeInsets.only(
+          top: widget.topPadding.h,
+          bottom: widget.bottomPadding.w,
+          right: widget.rightPadding.w,
+          left: widget.leftPadding.w,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(widget.radius),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(widget.radius),
+          borderSide: const BorderSide(
             color: Colors.grey,
           ),
-
-          border: InputBorder.none,
-          contentPadding:  EdgeInsets.symmetric(
-            vertical: widget.verticalPadding.h,
-            horizontal: widget.horizontalPadding.w,
-          ),
-
         ),
-
-
-        validator: widget.validator,
-        onSaved: (value) {
-          // widget.onSaved != null ? widget.onSaved!(value) : null;
-        },
-        keyboardType: widget.keyboardType,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(widget.radius),
+          borderSide: const BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: Colors.red,
+            ),
+            borderRadius: BorderRadius.circular(widget.radius)),
+        focusedErrorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: Colors.red,
+            ),
+            borderRadius: BorderRadius.circular(widget.radius)),
       ),
+      validator: widget.validator,
+      keyboardType: widget.keyboardType,
     );
   }
 }

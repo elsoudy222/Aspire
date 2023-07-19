@@ -7,8 +7,9 @@ import '../constants/app_colors/app_colors.dart';
 class CustomButton extends StatelessWidget {
 
   final String title;
+  final Color color;
   final VoidCallback onTap;
-  const CustomButton({super.key, required this.title, required this.onTap});
+  const CustomButton({super.key, required this.title, required this.onTap, required this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class CustomButton extends StatelessWidget {
         height: 60.h,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: AppColors.secondaryColor,
+          color: color,
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Center(

@@ -1,5 +1,6 @@
 import 'package:aspire_edu/view-model/cubits/app_cubit/appcubit_cubit.dart';
 import 'package:aspire_edu/view-model/cubits/famous_cubit/famous_cubit.dart';
+import 'package:aspire_edu/view/famous/widgets/custom_famous_card.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../core/components/custom_appbar.dart';
+import '../../core/components/custom_button.dart';
 import '../../core/components/custom_scaffold.dart';
 import '../../core/components/custom_send_form_dialog.dart';
 import '../../core/constants/app_colors/app_colors.dart';
@@ -18,6 +20,7 @@ class FamousScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var famousCubit = FamousCubit.get(context);
     return CustomScaffold(
         appBarCustom: CustomAppBar(
           icon: Icons.arrow_back_outlined,
@@ -27,10 +30,78 @@ class FamousScreen extends StatelessWidget {
         ),
         body: BlocConsumer<FamousCubit, FamousStates>(
           listener: (context, state) {
-            // TODO: implement listener
+            if(state is SuccessSendFamousFormDataState){
+              Navigator.pop(context);
+              // Then Show the New Dialog
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return Dialog(
+                      backgroundColor: Colors.transparent,
+                      child: Container(
+                        padding: EdgeInsets.all(25),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image(
+                              image:
+                              AssetImage("assets/images/congratiolations.png"),
+                            ),
+                            SizedBox(
+                              height: 15.h,
+                            ),
+                            Text(
+                              "تم الارسال",
+                              style: TextStyle(
+                                fontSize: 30.sp,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primaryColor,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15.h,
+                            ),
+                            Text(
+                              "سيتم التواصل معك لتاكيد حجزك",
+                              style: TextStyle(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20.w, vertical: 15.h),
+                              child: CustomButton(
+                                  title: "الرئيسية",
+                                  color: AppColors.secondaryColor,
+                                  onTap: () {
+                                    AppCubit.get(context).fullNameController.clear();
+                                    AppCubit.get(context).phoneController.clear();
+                                    AppCubit.get(context).notesController.clear();
+                                    /// to not save the model when try to get new lesson:
+                                   // famousCubit.famousModel.clear();
+                                    Navigator.pushNamedAndRemoveUntil(context, homeScreen, (route) => false,);
+
+
+
+                                  }),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  });
+            }
           },
           builder: (context, state) {
-            var famousCubit = FamousCubit.get(context);
+
             print(famousCubit.famousModel);
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 15.0.w, vertical: 20.h),
@@ -58,26 +129,65 @@ class FamousScreen extends StatelessWidget {
                   ),
                   ConditionalBuilder(
                     condition: state is! LoadingFamousState,
-                    builder: (context){
-                      return  Expanded(
+                    builder: (context) {
+                      return Expanded(
                         child: ListView.builder(
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
                             itemCount: famousCubit.famousModel.length,
                             itemBuilder: (context, index) {
                               print(famousCubit.famousModel);
-                              return customFamousCard(context,
-                                  instructor:
-                                  famousCubit.famousModel[index].celeName!,
-                                  subtitle:
-                                  famousCubit.famousModel[index].aboutcele!,
-                                  image:
-                                  "${baseImage}${famousCubit.famousModel[index].celePhoto}");
+                              return CustomFamousCard(
+                                instructor:
+                                    famousCubit.famousModel[index].celeName!,
+                                subtitle:
+                                    famousCubit.famousModel[index].aboutcele!,
+                                image:
+                                    "$baseImage${famousCubit.famousModel[index].celePhoto}",
+                                onTap: () {
+                                  print("tapped");
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return CustomSendingFormDialog(
+                                          title: 'انت دلوقتي بتحجز ندوة الاستاذ ${famousCubit.famousModel[index].celeName!}',
+                                          button: ConditionalBuilder(
+                                            condition: state
+                                                is! LoadingSendFamousFormDataState,
+                                            builder: (context) => CustomButton(
+                                              title: "ارسال",
+                                              color: AppColors.secondaryColor,
+                                              onTap: () {
+                                                ///============== Post Request:==================
+                                                famousCubit.sendFamousFormData(
+                                                  famousName: famousCubit.famousModel[index].celeName!,
+                                                  studentName: AppCubit.get(context).fullNameController.text,
+                                                  studentNumber: AppCubit.get(context).phoneController.text,
+                                                  notes: AppCubit.get(context).notesController.text,
+                                                );
+
+                                                print(famousCubit.famousModel[index].celeName!);
+                                                print(AppCubit.get(context).fullNameController.text);
+                                                print(AppCubit.get(context).phoneController.text);
+                                                print(AppCubit.get(context).notesController.text);
+
+                                                /// ===========================================================
+                                              },
+                                            ),
+                                            fallback: (context) => const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                },
+                              );
                             }),
                       );
                     },
-                    fallback: (context)=> SizedBox(
-                      height: MediaQuery.of(context).size.height/2,
+                    fallback: (context) => SizedBox(
+                      height: MediaQuery.of(context).size.height / 2,
                       child: Center(
                         child: CircularProgressIndicator.adaptive(
                           strokeWidth: 5,
@@ -85,7 +195,6 @@ class FamousScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                 ],
               ),
             );
@@ -106,7 +215,7 @@ Widget buttonWidget(
           builder: (context) {
             return CustomSendingFormDialog(
               title: 'ندوة',
-
+              button: Container(),
             );
           });
     },
@@ -185,7 +294,10 @@ Widget customFamousCard(
                   ),
                 ],
               ),
-              buttonWidget(context, title: "احجز الآن"),
+              buttonWidget(
+                context,
+                title: "احجز الآن",
+              ),
               SizedBox(
                 height: 10.h,
               ),
