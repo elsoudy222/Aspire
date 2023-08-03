@@ -1,8 +1,8 @@
 
 
 <div align="center">
-    <h1 align='center'><i>Orange Digital Center Hackathon Project</i></h1>
-   <img src="./screenshots/intro.png">
+    <h1 align='center'><i>Aspire Academy Project</i></h1>
+   <img src="">
 </div>
 
 
