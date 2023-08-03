@@ -160,13 +160,13 @@
   <tr>
 
 <td align="center">
-<a href="https://github.com/BudaSamir" target="_black">
-<img src="https://avatars.githubusercontent.com/u/126231095?v=4" width="150px;" alt="AbdulRahman Samir"/><br /><sub><b>AbdulRahman Samir</b></sub></a><br />
+<a href="" target="_black">
+<img src="" width="150px;" alt="AbdulRahman Samir"/><br /><sub><b>AbdulRahman Samir</b></sub></a><br />
 </td>
 
  <td align="center">
-<a href="https://github.com/NourhanHamada" target="_black">
-<img src="https://avatars.githubusercontent.com/u/88406076?v=4" width="150px;" alt="Nourhan Hamada"/><br /><sub><b>Nourhan Hamada</b></sub></a><br />
+<a href="" target="_black">
+<img src="" width="150px;" alt="Nourhan Hamada"/><br /><sub><b>Nourhan Hamada</b></sub></a><br />
 </td>
 </tr>
 </table>
