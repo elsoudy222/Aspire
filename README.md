@@ -57,28 +57,13 @@
 <strong><em>⚡️Splash Screens & Home Screene</em></strong></h3>
 </summary>
 <div align="center">
+   <img src="screenshots/Splash-2.png">
    <img src="screenshots/Splash.png">
-   <img src="./screenshots/Splash&onBoarding/SmartWallet.png">
-   <img src="./screenshots/Splash&onBoarding/SmartCard.png">
-   <img src="./screenshots/Splash&onBoarding/kid'sMoneyControl.png">
-   <img src="./screenshots/Splash&onBoarding/House'sMoneyMannagment.png">
-   <img src="./screenshots/Splash&onBoarding/Debt.png">
-   <img src="./screenshots/Splash&onBoarding/House'sMoneyMannagment2.png">
+   <img src="screenshots/Home.png">
+   <img src="screenshots/Stages.png">
+
 </div>
 
-<summary>
-<h3 style="display:inline">
-<strong><em>🔒 User Authentication</em></strong></h3>
-</summary>
-<div align="center">
-   <img src="./screenshots/Auth/Login.png">
-   <img src="./screenshots/Auth/signup.png">
-   <img src="./screenshots/Auth/OTP.png">
-   <img src="./screenshots/Auth/OTP2.png">
-   <img src="./screenshots/Auth/DoneOTP.png">
-   <img src="./screenshots/Auth/Passcode.png">
-   <img src="./screenshots/Auth/PasscodeAlert.png">
-</div>
 
 <summary>
 <h3 style="display:inline">
