@@ -10,7 +10,6 @@ import '../../core/components/custom_appbar.dart';
 import '../../core/components/custom_scaffold.dart';
 import '../../core/constants/data/data.dart';
 import 'model/home_model.dart';
-import '../stages/stages_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
