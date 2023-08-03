@@ -160,13 +160,13 @@
   <tr>
 
 <td align="center">
-<a href="" target="_black">
-<img src="" width="150px;" alt="AbdulRahman Samir"/><br /><sub><b>AbdulRahman Samir</b></sub></a><br />
+<a href="//github account" target="_black">
+<img src="git hub account image" width="150px;" alt="Name"/><br /><sub><b>AbdulRahman Samir</b></sub></a><br />
 </td>
 
  <td align="center">
-<a href="" target="_black">
-<img src="" width="150px;" alt="Nourhan Hamada"/><br /><sub><b>Nourhan Hamada</b></sub></a><br />
+<a href="//github account" target="_black">
+<img src="git hub account image" width="150px;" alt="Name"/><br /><sub><b>Nourhan Hamada</b></sub></a><br />
 </td>
 </tr>
 </table>
